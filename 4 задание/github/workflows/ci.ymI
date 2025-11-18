@@ -1,4 +1,4 @@
-name: Python CI
+name: Run tests
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,12 +17,13 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.11'
+        python-version: "3.11"
 
     - name: Install dependencies
       run: |
         pip install -r requirements.txt
+        pip install pytest coverage
 
-    - name: Run unit tests
+    - name: Run tests with coverage
       run: |
-        python -m unittest discover -v
+        pytest --maxfail=1 --disable-warnings --cov=. --cov-report=term-missing
